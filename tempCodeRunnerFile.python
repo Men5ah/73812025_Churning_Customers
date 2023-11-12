@@ -1,0 +1,64 @@
+import streamlit as st
+import numpy as np
+from sympy import *
+
+user_input = input("Enter a chemical eqn: ")
+
+reactants, products = user_input.split('-->')
+all_compounds = reactants.split('+') + products.split('+')
+
+distinct_operands = set()
+for i in all_compounds:
+    operand = "".join(char for char in i if char.isalpha())
+    distinct_operands.add(operand)
+
+distinct_elements = set()
+for compound in all_compounds:
+    for char in compound:
+        if char.isalpha():
+            distinct_elements.add(char)
+
+# Create a dictionary to store the counts of each element in each compound
+element_counts = {element: [] for element in distinct_elements}
+
+# Populate the dictionary with counts
+for element in distinct_elements:
+    for compound in all_compounds:
+        count = 0
+        for i, char in enumerate(compound):
+            if char == element:
+                # Check if the next character is a digit
+                if i + 1 < len(compound) and compound[i + 1].isdigit():
+                    count += int(compound[i + 1])
+                else:
+                    count += 1
+        element_counts[element].append(count)
+
+# Negate counts for elements on the right side of the arrow
+for element in distinct_elements:
+    for i in range(len(element_counts[element]) // 2, len(element_counts[element])):
+        element_counts[element][i] *= -1
+
+# Create the augmented matrix
+augmented_matrix = []
+for element in distinct_elements:
+    row = element_counts[element] + [0]
+    augmented_matrix.append(row)
+
+# Convert the list of lists to a NumPy array
+augmented_matrix_np = np.array(augmented_matrix)
+
+# Use the negated values in the last but one column to print the balanced chemical equation
+balanced_equation = ""
+for j, compound in enumerate(all_compounds):
+    try:
+        coefficient = int(round(augmented_matrix_np[j, -2]))
+        balanced_equation += f"{coefficient} {compound.strip()} + "
+    except IndexError:
+        print("Error: Index out of bounds. The augmented matrix does not have enough columns.")
+
+# Remove the trailing "+"
+balanced_equation = balanced_equation[:-2]
+
+print("Balanced Chemical Equation:")
+print(balanced_equation)
