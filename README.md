@@ -3,3 +3,5 @@ This is an ANN that predicts whether or not a customer will churn based on a lis
 
 Here is a link to a video demostration of the deployed site.
 https://aucampus-my.sharepoint.com/:f:/g/personal/john_adenu_ashesi_edu_gh/EpPWkKnSdb5PpGmi-X8LE0YBamsiSyjc7uXGrvMZbUmgHA?e=GaWITF
+
+Deployed using streamlit
