@@ -362,3 +362,6 @@ pickle.dump(scaler, open(filename, 'wb'))
 
 filename = 'model.pkl'
 pickle.dump(model, open(filename, 'wb'))
+
+filename = 'encoder.pkl'
+pickle.dump(label, open(filename, 'wb'))
